@@ -1,0 +1,26 @@
+git push的两种方式，SSH方式和HTTPS方式。
+
+
+在版本库的SSH方式和HTTPS方式是不同的，具体来说就是url信息的不同，但是，实际的认证机制也是不同的。当建立了本机密钥之后，使用ssh方式实际上是不需要再次认证的，而https则每次需要输入密码 。《Help.GitHub - SSH key passphrases》里也说了用SSH更方便更安全，不需要去输入长长的密码。
+
+我去看了下repo目录下的.git/config，果然，我的url是HTTPS形式。
+
+
+
+[remote "origin"]
+fetch = + refs/heads/*:refs/remotes/origin/*
+url = https://username@github.com/username/projectname.git
+
+因为远程版本库的url是HTTPS，估计是我git clone的时候用HTTPS链接造成的
+
+所以问题就出在这了，每次都很不方便，都要输入用户名和密码。
+
+为了使用SSH公钥的方式认证，我把config的url改成下面这样
+
+	
+
+[remote "origin"]
+fetch = + refs/heads/*:refs/remotes/origin/*
+url = git@github.com:username/projectname.git
+
+这样我git push的时候又可以用SSH公钥认证而不用去输入用户名和密码，不仅方便，而且更安全。
